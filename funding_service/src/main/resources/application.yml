@@ -1,0 +1,44 @@
+server:
+  port: 8088
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/localdb
+    driver: org.postgresql.Driver
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    bootstrap-servers: localhost:9092
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+
+app:
+  kafka:
+    topic:
+      invoice-funded-topic: invoice.funded.topic
+  rabbitmq:
+    exchange: funding.exchange
+    routing-key: invoice.funded
+    queue: invoice.funded.queue
+  services:
+    wallet-service:
+      base-uri: http://localhost:8087
+      scheme: http
+      host: localhost
+      port: 8087
+    invoice-service:
+      base-uri: http://localhost:8086
+  web3:
+    rpc-url: http://127.0.0.1:8545
+    private-key: "0x9d18321e4e9702384d52c315360a868f2276c5234c30d9e16904d330d47d9600"
+    contract-address: "0xaC8253B89603782a89da29E5579d4f7d83B5d839"
+

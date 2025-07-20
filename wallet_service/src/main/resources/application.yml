@@ -1,0 +1,17 @@
+server:
+  port: 8087
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/localdb
+    driver: org.postgresql.Driver
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+app:
+  sme-wallet-address: "0xaC8253B89603782a89da29E5579d4f7d83B5d839"

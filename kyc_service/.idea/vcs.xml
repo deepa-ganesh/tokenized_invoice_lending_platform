@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$/../../food-delivery-backend-cloud-native" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../funding_service" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../invoice_service" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../wallet_service" vcs="Git" />
+  </component>
+</project>

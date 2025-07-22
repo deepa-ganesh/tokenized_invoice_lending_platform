@@ -48,10 +48,11 @@ tokenized_invoice_lending_platform/
    cd tokenized_invoice_lending_platform
 ```
 
-### 2. Start PostgreSQL, RabbitMQ & Ganache
+### 2. Start/Stop PostgreSQL, RabbitMQ & Ganache
 
 ```bash
    docker-compose -f docker-compose.yml up -d
+   docker-compose down
 ```
 - **PostgreSQL**: localhost:5432 (user: postgres, pass: postgres)
 - **RabbitMQ UI**: http://localhost:15672 (guest/guest)

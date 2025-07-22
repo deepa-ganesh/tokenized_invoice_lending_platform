@@ -8,7 +8,6 @@ import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.gas.ContractGasProvider;
-import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
 
 import java.math.BigInteger;
@@ -43,6 +42,14 @@ public class Web3Config {
                 BigInteger.valueOf(6721975)       // gas limit: 5 million
         );
     }
+
+   /* @Bean
+    public StoreValue storeValue(Web3j web3j, Credentials credentials, ContractGasProvider gasProvider) {
+        if (contractAddress == null || !contractAddress.startsWith("0x")) {
+            throw new IllegalArgumentException("Invalid or missing contract address. Must be 0x-prefixed hex.");
+        }
+        return StoreValue.load(contractAddress, web3j, credentials, gasProvider);
+    }*/
 
     @Bean
     public InvoiceToken invoiceToken(Web3j web3j, Credentials credentials, ContractGasProvider gasProvider) {

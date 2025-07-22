@@ -5,6 +5,7 @@ import io.github.deepaganesh.wallet.entity.Wallet;
 import io.github.deepaganesh.wallet.repository.TokenBalanceRepository;
 import io.github.deepaganesh.wallet.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.Keys;
@@ -16,7 +17,6 @@ import java.security.NoSuchProviderException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,10 +25,15 @@ public class WalletService {
     private final WalletRepository walletRepository;
     private final TokenBalanceRepository tokenBalanceRepository;
 
+    @Value("${app.sme-wallet-address}")
+    private String smeWalletAddress;
+
     public Wallet createWallet(Long userId) throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
+        // Simulation
         ECKeyPair keyPair = Keys.createEcKeyPair();
         String walletAddress = "0x" + Keys.getAddress(keyPair.getPublicKey());
-        Wallet wallet = Wallet.builder().userId(userId).address(walletAddress).build();
+
+        Wallet wallet = Wallet.builder().userId(userId).address(smeWalletAddress).build();
         Wallet saved = walletRepository.save(wallet);
 
         tokenBalanceRepository.save(getTokenBalanceBySymbol(wallet.getId(), "USDT"));

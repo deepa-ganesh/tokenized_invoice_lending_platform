@@ -18,15 +18,15 @@ services:
       - "5672:5672"      # for apps
       - "15672:15672"    # management UI
 
-  ganache:
-    image: trufflesuite/ganache-cli
-    container_name: ganache
-    ports:
-      - "8545:8545"
-    command:
-      - --accounts=10
-      - --defaultBalanceEther=1000
-      - --mnemonic="myth like bonus scare over problem client lizard pioneer submit female collect"
+#  ganache:
+#    image: trufflesuite/ganache-cli
+#    container_name: ganache
+#    ports:
+#      - "8545:8545"
+#    command:
+#      - --accounts=10
+#      - --defaultBalanceEther=1000
+#      - --mnemonic="myth like bonus scare over problem client lizard pioneer submit female collect"
 
 volumes:
   pg_data:

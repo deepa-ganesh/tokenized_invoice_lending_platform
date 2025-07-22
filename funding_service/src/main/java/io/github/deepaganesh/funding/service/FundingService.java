@@ -10,6 +10,7 @@ import io.github.deepaganesh.funding.web3j.InvoiceToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -23,6 +24,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class FundingService {
+
+    @Value("${app.web3.account-address}")
+    private String accountAddress;
 
     private final FundingRepository fundingRepository;
     private final EventPublisher eventPublisher;
@@ -62,22 +66,10 @@ public class FundingService {
 
         /* --- Blockchain call --------------------------------- */
         try {
-            // TODO: Use wallet address from webClientService
-            /*String smeWalletAddress = webClientService.getWalletAddress(smeUserId);
+            String smeWalletAddress = webClientService.getWalletAddress(smeUserId);
             log.info("SME Wallet Address: {}", smeWalletAddress);
-            BigInteger tokenAmount = amount.multiply(BigDecimal.valueOf(100)).toBigInteger();*/
 
-            // Assuming 18 decimals (like ETH/ERC20)
-            int tokenDecimals = 18;
-
-            // Convert amount to the smallest unit (e.g., 15.75 -> 15750000000000000000 wei)
-            BigInteger tokenAmount = amount
-                    .multiply(BigDecimal.TEN.pow(tokenDecimals))
-                    .toBigIntegerExact(); // Use exact to catch unexpected decimals
-
-
-            TransactionReceipt receipt = invoiceToken.set(tokenAmount).send();
-            log.info("Invoice token minted. TxHash = {}", receipt.getTransactionHash());
+            mintInvoiceToken(accountAddress, amount);
 
             saved.setMintStatus(MintStatus.SUCCESS);
         } catch (Exception e) {
@@ -94,16 +86,15 @@ public class FundingService {
         return fundingRepository.findAll();
     }
 
-    public BigInteger getTokenBalance(String walletAddress) throws Exception {
+    public BigInteger getTokenBalance(String walletAddress) {
         try {
-            // TODO: Remove hand-coded contract address and use wallerAddress
-            BigInteger balance = invoiceToken.get().send();
-            log.info("Token balance: {}", balance.toString());
+            BigInteger invoiceTokenBalance = invoiceToken.balanceOf(walletAddress).send();
+            log.info("Invoice Token balance: {}", invoiceTokenBalance.toString());
+
+            return invoiceTokenBalance;
         } catch (Exception e) {
             throw new RuntimeException("Failed to retrieve token balance for the address: " + walletAddress, e);
         }
-
-        return null;
     }
 
     @Service
@@ -119,33 +110,43 @@ public class FundingService {
         @Autowired
         InvoiceToken invoiceToken;
 
+        @Value("${app.web3.account-address}")
+        private String accountAddress;
+
+        @Autowired
+        FundingService fundingService;
+
         @Scheduled(fixedDelay = 60000) // every 60 seconds
         public void retryFailedMints() {
             List<FundingTransaction> failedTxs = fundingRepository.findByMintStatus(MintStatus.FAILED);
 
             for (FundingTransaction tx : failedTxs) {
                 try {
-                    /*String smeWalletAddress = webClientService.getWalletAddress(tx.getSmeUserId());
-                    BigInteger tokenAmount = tx.getAmount().multiply(BigDecimal.valueOf(100)).toBigInteger();*/
+                    String smeWalletAddress = webClientService.getWalletAddress(tx.getSmeUserId());
 
-                    // Assuming 18 decimals (like ETH/ERC20)
-                    int tokenDecimals = 18;
-
-                    // Convert amount to the smallest unit (e.g., 15.75 -> 15750000000000000000 wei)
-                    BigInteger tokenAmount = tx.getAmount()
-                            .multiply(BigDecimal.TEN.pow(tokenDecimals))
-                            .toBigIntegerExact(); // Use exact to catch unexpected decimals
-
-                    TransactionReceipt receipt = invoiceToken.set(tokenAmount).send();
-                    log.info("Retry successful: {}", receipt.getTransactionHash());
+                    fundingService.mintInvoiceToken(smeWalletAddress, tx.getAmount());
+                    log.info("Retry successful for invoice {}: {}", tx.getInvoiceId(), smeWalletAddress);
 
                     tx.setMintStatus(MintStatus.SUCCESS);
                     fundingRepository.save(tx);
                 } catch (Exception e) {
-                    log.error("Retry failed for invoice {}:{}", tx.getInvoiceId(), e.getMessage());
+                    log.error("Retry failed for invoice {}: {}", tx.getInvoiceId(), e.getMessage());
                     // still FAILED, can retry again
                 }
             }
         }
+    }
+
+    private void mintInvoiceToken(String walletAddress, BigDecimal amount) throws Exception {
+        log.info("Minting invoice token for wallet address: {} and amount: {}", walletAddress, amount);
+        int tokenDecimals = 18;
+
+        BigInteger tokenAmount = amount
+                .multiply(BigDecimal.TEN.pow(tokenDecimals))
+                .toBigIntegerExact();
+        log.info("Converted token amount (wei): {}", tokenAmount);
+
+        TransactionReceipt receipt = invoiceToken.mint(walletAddress, tokenAmount).send();
+        log.info("Invoice token minted. TxHash = {}", receipt.getTransactionHash());
     }
 }

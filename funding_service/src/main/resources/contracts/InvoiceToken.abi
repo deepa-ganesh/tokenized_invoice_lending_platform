@@ -1,155 +1,79 @@
 [
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "invoiceId",
-				"type": "uint256"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "issuer",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "InvoiceTokenized",
-		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "getInvoice",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "invoiceId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "issuer",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "timestamp",
-						"type": "uint256"
-					}
-				],
-				"internalType": "struct InvoiceToken.Invoice",
-				"name": "",
-				"type": "tuple"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "invoices",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "invoiceId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "issuer",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "timestamp",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "nextTokenId",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "invoiceId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "tokenizeInvoice",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	}
-]
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "Mint",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "balances",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "mint",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        }
+      ],
+      "name": "balanceOf",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    }
+  ]

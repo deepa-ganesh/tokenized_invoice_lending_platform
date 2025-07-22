@@ -39,8 +39,8 @@ public class Web3Config {
     @Bean
     public ContractGasProvider contractGasProvider() {
         return new StaticGasProvider(
-                BigInteger.valueOf(20_000_000_000L), // gas price: 20 Gwei
-                BigInteger.valueOf(5_000_000)        // gas limit: 5 million
+                BigInteger.valueOf(20000000000L), // gas price: 20 Gwei
+                BigInteger.valueOf(6721975)       // gas limit: 5 million
         );
     }
 

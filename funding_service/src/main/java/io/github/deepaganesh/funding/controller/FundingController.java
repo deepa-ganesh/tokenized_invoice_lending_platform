@@ -33,7 +33,7 @@ public class FundingController {
     }
 
     @GetMapping("/token-balance/{walletAddress}")
-    public ResponseEntity<BigInteger> getTokenBalance(@PathVariable String walletAddress) {
+    public ResponseEntity<BigInteger> getTokenBalance(@PathVariable String walletAddress) throws Exception {
         BigInteger balance = fundingService.getTokenBalance(walletAddress);
         return ResponseEntity.ok(balance);
     }
